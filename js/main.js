@@ -1,4 +1,3 @@
-const autocomplete_menu = require("./autocomplete_menu");
 
 var API_PREFIX = 'https://api.github.com/repos/trentinl/trentinl.github.io',
     e = "user@hangthe.dev";
