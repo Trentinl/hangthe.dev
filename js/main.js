@@ -1,5 +1,5 @@
 
-var API_PREFIX = 'https://api.github.com/repos/trentinl/hangthe.dev',
+var API_PREFIX = 'https://api.github.com/repos/trentinl/hangthe.dev/git',
     e = "user@hangthe.dev";
 var GitHub = new (function() {
     this.fs = new Object;
@@ -154,6 +154,9 @@ var App = {
         this.echo("FtT/NqzfpjIU6QYn+K6EbLD0qmTb1TKVUohLZkkPQY5STWvhPwjHAdPR\n")
         this.echo("=CKw+\n")
         this.echo("\n")
+        this.echo("\n");
+        this.echo("-----END PGP PUBLIC KEY BLOCK-----\n");
+        this.echo("\n"); 
 
         if(ga != undefined) ga('send', 'event', GitHub.getCurrentPath(), 'pgp');
 
