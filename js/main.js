@@ -1,4 +1,4 @@
-var API_PREFIX = '',
+var API_PREFIX = 'https://api.github.com/repos/trentinl/trentinl.github.io',
     e = "user@hangthe.dev";
 var GitHub = new (function() {
     this.fs = new Object;
