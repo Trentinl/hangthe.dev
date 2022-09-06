@@ -104,7 +104,7 @@ var App = {
     },
     
     about: function() {
-        this.echo("")
+        this.echo("\n")
         this.echo("") 
         this.echo("") 
         this.echo("\n"); 
