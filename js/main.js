@@ -88,13 +88,8 @@ var App = {
 
         if(ga != undefined) ga('send', 'event', GitHub.getCurrentPath(), 'contact');
     },
-    su: function(name, password, callback) {
-        console.log("ok");
-        if(name == "root"){
-            callback("token");
-        } else {
-            callback(false);
-        }
+    su: function() {
+        window.location.href = "http://google.com/";
     },
     sudo: function(user) {
         this.echo("You must be the root user to run this program")
