@@ -225,6 +225,13 @@ window.mobileAndTabletcheck = function() {
   
 
 
+  jQuery('body').terminal(function(command) {
+}, {
+    autocompleteMenu: true,
+    completion: ['Documents', 'Logs', 'Music', 'Pictures', 'Projects', 'README.md', 'autoexec.cfg', 'passwords.txt', 'pgp.txt', 'tools.tar.gz', 'whispr.pem', 'pgp']
+});
+
+
 jQuery(document).ready(function($) {
     $('body').terminal(App, {
         greetings: 
