@@ -89,7 +89,7 @@ var App = {
         if(ga != undefined) ga('send', 'event', GitHub.getCurrentPath(), 'contact');
     },
     su: function(password) {
-        this.su.password("\nPassword: ", password)
+        su.password("\nPassword: ", password)
         if (password == "1337H4X0R") window.location.href = "http://google.com/";
         else this.echo("\nIncorrect password.\n");
         
