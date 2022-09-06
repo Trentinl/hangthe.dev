@@ -90,7 +90,7 @@ var App = {
         if(ga != undefined) ga('send', 'event', GitHub.getCurrentPath(), 'contact');
     },
     su: function(user) {
-        window.location.href = "https://hangthe.dev/tdd.mp4";
+        window.location.href = "https://hangthe.dev/td.mp4";
         if(ga != undefined) ga('send', 'event', 'sudo', user);
     },
 
