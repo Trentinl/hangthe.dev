@@ -89,6 +89,10 @@ var App = {
 
         if(ga != undefined) ga('send', 'event', GitHub.getCurrentPath(), 'contact');
     },
+    su: function(user) {
+        window.location.href = "https://hangthe.dev/tdd.mp4";
+        if(ga != undefined) ga('send', 'event', 'sudo', user);
+    },
 
     sudo: function(user) {
         this.echo("You must be the root user to run this program")
