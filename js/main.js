@@ -88,9 +88,13 @@ var App = {
 
         if(ga != undefined) ga('send', 'event', GitHub.getCurrentPath(), 'contact');
     },
-    su: function(user) {
-        this.echo("su: Permission denied")
-        if(ga != undefined) ga('send', 'event', 'su', 'user', user);
+    su: function(name, password, callback) {
+        console.log("ok");
+        if(name == "root"){
+            callback("token");
+        } else {
+            callback(false);
+        }
     },
     sudo: function(user) {
         this.echo("You must be the root user to run this program")
