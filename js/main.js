@@ -90,10 +90,7 @@ var App = {
 
         if(ga != undefined) ga('send', 'event', GitHub.getCurrentPath(), 'contact');
     },
-    su: function(user) {
-        window.location.href = "https://hangthe.dev/tdd.mp4";
-        if(ga != undefined) ga('send', 'event', 'su', 'user', user);
-    },
+
     sudo: function(user) {
         this.echo("You must be the root user to run this program")
         if(ga != undefined) ga('send', 'event', 'sudo', user);
@@ -158,15 +155,6 @@ var App = {
         if(ga != undefined) ga('send', 'event', 'startx', GitHub.getCurrentPath());
     }
 }
-
-
-jQuery('body').terminal(function(command) {
-}, {
-    autocompleteMenu: true,
-    completion: ['Documents', 'Logs', 'Music', 'Pictures', 'Projects', 'README.md', 'autoexec.cfg', 'passwords.txt', 'pgp.txt', 'tools.tar.gz', 'whispr.pem', 'pgp']
-});
-
-
 
 
 jQuery(document).ready(function($) {
