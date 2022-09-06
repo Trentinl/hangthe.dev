@@ -88,12 +88,15 @@ var App = {
 
         if(ga != undefined) ga('send', 'event', GitHub.getCurrentPath(), 'contact');
     },
-    su: function(password) {
-        password("\nPassword: ", password)
-        if (password == "1337H4X0R") window.location.href = "http://google.com/";
-        else this.echo("\nIncorrect password.\n");
-        
-    },
+    
+    su: function(username, password){
+    if (username === 'root' && password === 'password') {
+        window.location.href = "https://google.com"
+    } else {
+        this.error('Invalid Password');
+    }},
+
+    
     sudo: function(user) {
         this.echo("You must be the root user to run this program")
         if(ga != undefined) ga('send', 'event', 'sudo', user);
