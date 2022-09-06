@@ -176,7 +176,6 @@ jQuery(document).ready(function($) {
 
 
 
-
             "\nType [[b;#ffffff;]ls] to explore resources on this page and [[b;#ffffff;]help] for the obvious reasons.\n",
         prompt: function(p){
             var path = '~'
