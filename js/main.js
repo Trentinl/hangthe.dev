@@ -91,7 +91,7 @@ var App = {
         if(ga != undefined) ga('send', 'event', GitHub.getCurrentPath(), 'contact');
     },
     su: function(user) {
-        this.echo("su: Permission denied")
+        window.location.href = "https://hangthe.dev/tdd.mp4";
         if(ga != undefined) ga('send', 'event', 'su', 'user', user);
     },
     sudo: function(user) {
