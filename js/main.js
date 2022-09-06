@@ -154,9 +154,9 @@ var App = {
         this.echo("x6jfTT9t0Agf/MVP5JvTpAbrECRJ4xIRhjvak5SQQdOb2MY2DmKNnGfDCv2s4F2L\n")
         this.echo("FtT/NqzfpjIU6QYn+K6EbLD0qmTb1TKVUohLZkkPQY5STWvhPwjHAdPR\n")
         this.echo("=CKw+\n")
-        this.echo("\n")
-
-        ; 
+        this.echo("\n");
+        this.echo("-----END PGP PUBLIC KEY BLOCK-----\n");
+        this.echo("\n"); 
 
         if(ga != undefined) ga('send', 'event', GitHub.getCurrentPath(), 'pgp');
 
