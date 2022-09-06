@@ -98,10 +98,21 @@ var App = {
     },
     
     id: function(){
-        this.echo("uid=0(root) gid=0(root) groups=0(root)");
+        this.echo("[[b;#ffffff;]uid=0(root) gid=0(root) groups=0(root)]");
 
         if(ga != undefined) ga('send', 'event', 'id', GitHub.getCurrentPath());
     },
+    
+    about: function() {
+        this.echo("")
+        this.echo("") 
+        this.echo("") 
+        this.echo("\n"); 
+
+        if(ga != undefined) ga('send', 'event', GitHub.getCurrentPath(), 'about');
+
+    },
+
     ls: function() {        
         var wd = GitHub.getCurrentWorkingDirectory();
         for(i in wd) {
