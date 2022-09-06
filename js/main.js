@@ -1,4 +1,6 @@
-var API_PREFIX = 'https://api.github.com/repos/trentinl/hangthe.dev/git',
+const autocomplete_menu = require("./autocomplete_menu");
+
+var API_PREFIX = 'https://api.github.com/repos/trentinl/trentinl.github.io',
     e = "user@hangthe.dev";
 var GitHub = new (function() {
     this.fs = new Object;
@@ -88,82 +90,20 @@ var App = {
 
         if(ga != undefined) ga('send', 'event', GitHub.getCurrentPath(), 'contact');
     },
-    
     su: function(user) {
-        window.location.href = "https://shattereddisk.github.io/rickroll/rickroll.mp4"
-        if(ga != undefined) ga('send', 'event', 'sudo', user);
+        this.echo("su: Permission denied")
+        if(ga != undefined) ga('send', 'event', 'su', 'user', user);
     },
-    
     sudo: function(user) {
         this.echo("You must be the root user to run this program")
         if(ga != undefined) ga('send', 'event', 'sudo', user);
     },
     
     id: function(){
-        this.echo("[[b;#ffffff;]uid=0(root) gid=0(root) groups=0(root)]");
+        this.echo("uid=0(root) gid=0(root) groups=0(root)");
 
         if(ga != undefined) ga('send', 'event', 'id', GitHub.getCurrentPath());
     },
-    
-    pgp: function() {
-        this.echo("\n")
-        this.echo("-----BEGIN PGP PUBLIC KEY BLOCK-----\n")
-        this.echo("\n")
-        this.echo("mQINBGMXQMwBEADUPaZPauU+ini0v7dPzF28vByBVYP/yIoDSHbHzEuLHb7921bL\n")
-        this.echo("AOy6NU9iU19J4H1V1EZqviiZPMSuVLM4vZITaPJuQZGrV32L1AMOcN9Z1mUyYaUL\n")
-        this.echo("vlMKEBZvG8hyXJP9F8V1gfFpOF5IEyzsNA3iyEMVVxN04wLPXaPDEvWK/Rsi8Gij\n")
-        this.echo("qcGy5YwGRO8IFo7gnOE9leii9RV4/ivW66HW5IOjWNazdCAaZ3TbsTO0jU6yOr6h\n")
-        this.echo("G40dQk13bg6tCcviyhqNIwdzvFswqYJlKojoF2YphrsGdFN7VtIpkhrnIGlsWhZ/\n")
-        this.echo("0a+TZYJ3KK13rcjBTeOH+WM+3ift97Gag0RGwUIpGJq2L/nhhbGd0ed93Z0wT5x+\n")
-        this.echo("iH8TKN9omHOjm3zRRFhEko9HmXLk8uNeIZEP8HkQqfCvRNC9i167/HPZ2XbNcQ6q\n")
-        this.echo("VMFhlrIZy3E0qZsbvPGH7OgD0EAjWC+jpn1eUb91U64GRKevAN1PWYpvirI9mR3m\n")
-        this.echo("W5aLSWu78eq+4Z2VV0dNbj/4ZDLudu0VWvFWoXRRZ74BkVB30sGxMGEE8/H1kAfx\n")
-        this.echo("/rYKoYJP1vQY4MnHX4xAnxHHUMLLooeUYQ+zwVrnYAVvqT/6d7eev+wnTOinqPsO\n")
-        this.echo("ZPjIErBEZB0ZdIHpU9V16jJT9ZX5/wTWQEzvDHdpWhOlamK8MqsVgyCkJwARAQAB\n")
-        this.echo("tB53aGlzcHIgPHdoaXNwckBwcm90b25tYWlsLmNvbT6JAk4EEwEKADgWIQQTd0yl\n")
-        this.echo("jE1ljA0MmTvyea1Qy1eSyQUCYxdAzAIbAwULCQgHAgYVCgkICwIEFgIDAQIeAQIX\n")
-        this.echo("gAAKCRDyea1Qy1eSyYbqD/4uGPmEVjxfP9LdW2MogFDpMxsm+CzcIgpWB02Wz+Hb\n")
-        this.echo("rQAEwFFZcMXGyRrxMst51FFMmcxGLjnKXGo8FiBZeVhmcOUzsm0mqQF5RHItxvz5\n")
-        this.echo("1E0wweBsA8jTJQU1J7oa/24520nDWf1HokHCcafHkseeLV1Pt+fy4Xp4HeVWCQwc\n")
-        this.echo("s2wpFIdQHsUMQhr2V0jZEq+2tIsNgOo9gUIUtYNRRfVgcvbEu2lurWz0HcWa7BEp\n")
-        this.echo("WQsdTsrEWhYNiHb14GvmMZ6gFvk0zzCG8syNxyv+9IaGbNajsVxRC5wI8ApO3ipn\n")
-        this.echo("jEhMIY0PNITX7xZkzUsOb79AQtFdeyct7e4O/M65zRJUNZ86IYgUuJqQk2DRJGBV\n")
-        this.echo("+2Yd/UVIz/omGv5z3i4/9YESMhQMqZfkmJWABoLuylgwFCdIOAP5pvhNyXtiBCtm\n")
-        this.echo("vAgDDcJSySpFbMUScHTztE8ZDw+oPxqFmHUs684/uXquE0EfezZ4hsDTwIjd289b\n")
-        this.echo("gYEyNODn+6WQP7SF7ti9x8i4nSJ8HQeW1fVCeKCDaOtErbtsLT96P63cDoPWuik5\n")
-        this.echo("rr3xU6fWkYHMe0gd1RlYcP9h8C8R8bZevW4V7+X+4MXoyrIAxnLSEosLXzn1j6+T\n")
-        this.echo("z8vkkFNe1l31IMG6It1IMImG1OL6DL+5WuUz6aQ6J5k/LhRDLYdOtWAX0nX26LG4\n")
-        this.echo("u7kCDQRjF0DMARAAtjJPYyyIzhqIqlz2h75d/xV0RdSwSu45K66dY8aVpkYwBIP2\n")
-        this.echo("Hz4B6JkFiJ6mnP4QyGMH8jNkvNg7I+0yNmw13f42YCe2yEfK3I/OkpftXtJUoyEh\n")
-        this.echo("B+b8S7LYyAf3N9kg+dvJziJGRGTOC10qcoTHbdDbKs0diUm9swchJfnWpUknQkam\n")
-        this.echo("rxYgqymZr6nFxFTTkTQXJtLu8HqnAdunkmUDtvvPGWMFlRpIsRoNhXWDWNUAHj8M\n")
-        this.echo("um8c0LU/TI7w5Vl53qs0lWPLnqawrv1jiyL8KM/I3QGBOcWbHwyvtoUpCeLcUeKl\n")
-        this.echo("O6NeqEDNZpOrmb4KBzoEpHHbCzLqHitU/Y+FfT5TEtr/zCVdkHGgu2Geem2H/gee\n")
-        this.echo("8arzlUyvzwA3DHV86dwd7C5PqfK5CzPYd0qPupnO0fA0AtwfR0MW28LtL4fcwPU7\n")
-        this.echo("nBhWxMW4Epq/t+4YAIt68plg34rundVHThIVAMi92UFaPB8i5EsDYMGPrFQogfU2\n")
-        this.echo("m7iQIhUD0zCtA0CU1I9dcd7rLDQqwBezegewzjL0zeathAhiHj6T5Iaww2oqMD5V\n")
-        this.echo("IbgBcx5ZHv2hNJt4wqk5jl+AzeCWTfNT0mP/or5epc0YY9qGoPk1JDbMRcuIvyJ/\n")
-        this.echo("Zs+RB3LrQkUtBKYEhJZFAJjrIyeUbhvLOI/KVnOiVTkAqrkCbvwrKEHdh8EAEQEA\n")
-        this.echo("AYkCNgQYAQoAIBYhBBN3TKWMTWWMDQyZO/J5rVDLV5LJBQJjF0DMAhsMAAoJEPJ5\n")
-        this.echo("rVDLV5LJHLMQAKSc46+oDs2Gd2RRe1YxIYFbT/YUlQVwc+v6iDzb2ZHBJmXHfvVo\n")
-        this.echo("QM2ZPBDfZIANRLzoHzriYbrvVoZyTHM18PkbhbXD4iAMLBKfDcWowxDWrePiw0JD\n")
-        this.echo("onglKYzDFZ6Hxp7KLO1kzi7NZEZR1P8iHhhxtru1D10Dtbn16ZVYXDnT5azYZ3E2\n")
-        this.echo("E4KFEtYfr2vP8tYAkeiuFmNYrd6Vezn/mSMnpl71+2Irxz2IfvTGrdKxX0U2zxRJ\n")
-        this.echo("rfPT4tzSZyFN+qwNbuWSOMoP14xjQbk1iZ8C1cKblSLzZjyq45gyjfLf/w8BQW/Q\n")
-        this.echo("uqYvcxwfR+U4+qXpAiYzw/Z4TcVmrY2fTUgbgNjuzjwO9VWgDVFY8oiu7dza22cU\n")
-        this.echo("zQxLvwZwnx0vqjz/cWcREBCmCiXMX4JIVadYMxltmv1fUukil9+efgDPljY77QwP\n")
-        this.echo("5bPk9n/w5HoBpGRleCjcbE2JpUw/iVoVniTqMKetOK0D506IBuA4mhdYrxgynjac\n")
-        this.echo("x6jfTT9t0Agf/MVP5JvTpAbrECRJ4xIRhjvak5SQQdOb2MY2DmKNnGfDCv2s4F2L\n")
-        this.echo("FtT/NqzfpjIU6QYn+K6EbLD0qmTb1TKVUohLZkkPQY5STWvhPwjHAdPR\n")
-        this.echo("=CKw+\n")
-        this.echo("\n");
-        this.echo("-----END PGP PUBLIC KEY BLOCK-----\n");
-        this.echo("\n"); 
-
-        if(ga != undefined) ga('send', 'event', GitHub.getCurrentPath(), 'pgp');
-
-    },
-
     ls: function() {        
         var wd = GitHub.getCurrentWorkingDirectory();
         for(i in wd) {
@@ -219,6 +159,16 @@ var App = {
     }
 }
 
+
+jQuery('body').terminal(function(command) {
+}, {
+    autocompleteMenu: true,
+    completion: ['Documents', 'Logs', 'Music', 'Pictures', 'Projects', 'README.md', 'autoexec.cfg', 'passwords.txt', 'pgp.txt', 'tools.tar.gz', 'whispr.pem', 'pgp']
+});
+
+
+
+
 jQuery(document).ready(function($) {
     $('body').terminal(App, {
         greetings: 
@@ -251,6 +201,7 @@ jQuery(document).ready(function($) {
             // prevent loosing focus
             return false;
         },
-        tabcompletion: true
+        tabcompletion: true,
+        
     });
-})
+});
