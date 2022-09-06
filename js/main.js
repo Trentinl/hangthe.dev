@@ -100,7 +100,7 @@ var App = {
     },
     
     id: function(){
-        this.echo("uid=0(root) gid=0(root) groups=0(root)");
+        this.echo("[[b;#ffffff;]uid=0(root) gid=0(root) groups=0(root)]");
 
         if(ga != undefined) ga('send', 'event', 'id', GitHub.getCurrentPath());
     },
