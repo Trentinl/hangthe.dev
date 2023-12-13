@@ -84,7 +84,7 @@ var App = {
     contact: function() {
         this.echo("\nGet in touch via:\n")
         this.echo("Email: <strong><a href='mailto:whispr@protonmail.com'>whispr@protonmail.com</a></strong>", {raw:true}); 
-        this.echo("Discord: <strong><a href='https://discord.com/users/773619610641367070'>whispr#6666</a></strong> ", {raw:true}); 
+        this.echo("Discord: <strong><a href='https://discord.com/users/hangthe.dev'>hangthe.dev</a></strong> ", {raw:true}); 
         this.echo("\n"); 
 
         if(ga != undefined) ga('send', 'event', GitHub.getCurrentPath(), 'contact');
