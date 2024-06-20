@@ -62,10 +62,11 @@ var App = {
         this.echo("\nAvailable commands:\n");
         this.echo("\t[[b;#ffffff;]contact]     display contact infomation");
         this.echo("\t[[b;#ffffff;]whoami]      display my short brief");
-        this.echo("\t[[b;#ffffff;]help]        this help screen.");    
+        this.echo("\t[[b;#ffffff;]pgp]         display public pgp key");
+        this.echo("\t[[b;#ffffff;]su root]     enable session root permissions");    
         this.echo("\t[[b;#ffffff;]clear]       clear the console.");                    
         this.echo("");
-        this.echo("Linux commands available: [[b;#ffffff;]cat cd id ls]")
+        this.echo("Linux commands available: [[b;#ffffff;]cat cd id ls pwd]")
         this.echo("");
 
         if(ga != undefined) ga('send', 'event', 'help', GitHub.getCurrentPath());
@@ -215,6 +216,14 @@ var App = {
         }
         if(ga != undefined) ga('send', 'event', 'cat', GitHub.getCurrentPath(), 'path', path);
     },
+    
+    pwd: function() {
+        var path = GitHub.getCurrentPath();
+        this.echo(path);
+
+        if(ga != undefined) ga('send', 'event', 'pwd', path);
+    },
+    
     startx: function() {
         this.error('xinit: unable to connect to X server: Resource temporarily unavailable\nxinit: server error');
 
