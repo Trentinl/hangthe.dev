@@ -257,7 +257,7 @@ jQuery(document).ready(function($) {
                     path+= GitHub.stack[i]
                 }
             }
-            p("user@hangthe.dev" + ":" + path + "# ");
+            p("whispr@hangthe.dev" + ":" + path + "# ");
         },
         onBlur: function() {
             // prevent loosing focus
