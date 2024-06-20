@@ -1,4 +1,3 @@
-
 var API_PREFIX = 'https://api.github.com/repos/trentinl/hangthe.dev/git',
     e = "whispr@hangthe.dev";
 var GitHub = new (function() {
@@ -231,6 +230,23 @@ var App = {
     }
 }
 
+function handleAutocomplete(term) {
+    var command = term.get_command();
+    var words = command.split(' ');
+    var lastWord = words[words.length - 1];
+    
+    var fs = GitHub.getCurrentWorkingDirectory();
+    var suggestions = Object.keys(fs).filter(function(file) {
+        return file.startsWith(lastWord);
+    });
+    
+    if (suggestions.length === 1) {
+        words[words.length - 1] = suggestions[0];
+        term.set_command(words.join(' ') + ' ');
+    } else if (suggestions.length > 1) {
+        term.echo(suggestions.join('\n'));
+    }
+}
 
 jQuery(document).ready(function($) {
     $('body').terminal(App, {
@@ -264,6 +280,13 @@ jQuery(document).ready(function($) {
             return false;
         },
         tabcompletion: true,
-        
+        tabcompletion: true,
+        completion: function(command, callback) {
+            var fs = GitHub.getCurrentWorkingDirectory();
+            var suggestions = Object.keys(fs).filter(function(file) {
+                return file.startsWith(command);
+            });
+            callback(suggestions);
+        }
     });
 });
