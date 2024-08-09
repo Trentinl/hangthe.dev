@@ -65,7 +65,7 @@ var App = {
         this.echo("\t[[b;#ffffff;]su root]     enable session root permissions");    
         this.echo("\t[[b;#ffffff;]clear]       clear the console.");                    
         this.echo("");
-        this.echo("Linux commands available: [[b;#ffffff;]cat cd id ls pwd]")
+        this.echo("Navigational commands: [[b;#ffffff;]cat cd id ls pwd]")
         this.echo("");
 
         if(ga != undefined) ga('send', 'event', 'help', GitHub.getCurrentPath());
