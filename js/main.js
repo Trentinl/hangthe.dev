@@ -72,7 +72,7 @@ var App = {
     },
     whoami: function() {
         this.echo("\nDon't believe we've met...\n");
-        this.echo("Just for context, here's abit about myself\n");
+        this.echo("Just for context, here's a bit about myself\n");
         this.echo("\t- I'm a security enthusiast pursuing a degree in the area.");
         this.echo("\t- A CTF Competitor");
         this.echo("\t- A Programmer, mainly just to craft what I need");
