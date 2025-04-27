@@ -91,3 +91,32 @@
     text-decoration: underline;
     
 }
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background: black !important;
+    color: rgb(0,255,50) !important;
+    -webkit-text-size-adjust: none;
+  }
+  
+  #terminal, .terminal {
+    min-height: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    background: black !important;
+    color: rgb(0,255,50) !important;
+  }
+  
+  #mobile-input {
+    position: fixed;
+    bottom: 0; left: 0;
+    width: 100%;
+    z-index: 2000;
+  }
+  
+  .terminal, .terminal * {
+    background: transparent !important;
+    color: inherit !important;
+  }
