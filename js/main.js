@@ -25,12 +25,10 @@ var GitHub = new (function() {
 
     var self = this;
 
-    // Fetch the SHA for master
     $.getJSON(API_PREFIX + '/refs/heads/master')
      .done(function(refData) {
         var sha = refData.object.sha;
 
-        // Fetch the full tree recursively
         $.getJSON(API_PREFIX + '/trees/' + sha + '?recursive=1')
          .done(function(treeData) {
             treeData.tree.forEach(function(item) {
@@ -41,12 +39,10 @@ var GitHub = new (function() {
                     var isLeaf = (idx === parts.length - 1);
 
                     if (!isLeaf) {
-                        // Ensure directory exists, then descend
                         cursor[part] = cursor[part] || {};
                         cursor = cursor[part];
                     } else {
-                        // Leaf node: assign the GitHub item
-                        item.path = part;  // keep only basename
+                        item.path = part;
                         cursor[part] = item;
                     }
                 });
@@ -255,17 +251,7 @@ jQuery(function($) {
     const isMobile = /iPhone|iPad|iPod|Android|Pixel|webOS|BlackBerry|Windows Phone|Opera Mini|IEMobile/i
                      .test(navigator.userAgent);
 
-    if (isMobile) {
-        $('#mobile-input').show();
-        $('#mobile-input').on('keypress', function(e) {
-            if (e.key === 'Enter') {
-                var cmd = $(this).val();
-                $('#terminal').terminal().exec(cmd);
-                $(this).val('');
-            }
-        });
-    } else {
-        $('body').terminal(App, {
+        $('#terminal').terminal(App, {
             greetings:
                 "             _                       \n" +
                 "            | |                     \n" +
@@ -277,29 +263,36 @@ jQuery(function($) {
                 "                        |_|         \n" +
                 "\nType [[b;#ffffff;]ls] to explore resources on this page and [[b;#ffffff;]help] for the obvious reasons.\n",
             prompt: function(callback) {
-                var path = '~';
-                if (GitHub.stack.length > 0) {
-                    path += '/' + GitHub.stack.join('/');
-                }
-                callback("whispr@hangthe.dev:" + path + "# ");
+                let path = '~' + (GitHub.stack.length ? '/' + GitHub.stack.join('/') : '');
+                callback(`whispr@hangthe.dev:${path}# `);
             },
-            onBlur: function() {
-                if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-                    return true;
-                }
-                return false;
-            },
-            tabcompletion: true,
-            mobileIgnoreAutoFocus: false,
-            useDefaultInput: true,
-            completion: function(command, callback) {
-                var fs = GitHub.getCurrentWorkingDirectory();
-                var suggestions = Object.keys(fs).filter(function(f) {
-                    return f.startsWith(command);
-                });
-                callback(suggestions);
-            }
-        });
-    }
-});
 
+            tabcompletion: true,
+
+            completion: function(string, callback) {
+                const full = this.get_command();
+                const before = this.before_cursor();
+                const parts = before.trim().split(/\s+/);
+                if (parts.length <= 1) {
+                    const cmds = Object.keys(App).filter(cmd => cmd.startsWith(string));
+                    callback(cmds);
+                } else {
+                    const fs = GitHub.getCurrentWorkingDirectory();
+                    const list = Object.keys(fs).filter(name => name.startsWith(string));
+                    callback(list);
+                }
+            },
+    
+            mobileIgnoreAutoFocus: false,
+            useDefaultInput: !isMobile
+        });
+    
+        if (isMobile) {
+            $('#mobile-input').show().on('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    $('#terminal').terminal().exec($(this).val());
+                    $(this).val('');
+                }
+            });
+        }
+    });
