@@ -251,12 +251,7 @@ jQuery(document).ready(function($) {
             }
             p("whispr@hangthe.dev" + ":" + path + "# ");
         },
-        onBlur: function() {
-            if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-                return true;
-            }
-            return false;
-        },
+        
         tabcompletion: true,
         mobileIgnoreAutoFocus: false,
         useDefaultInput: true,
