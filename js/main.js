@@ -1,82 +1,75 @@
 var API_PREFIX = 'https://api.github.com/repos/trentinl/hangthe.dev/git',
     e = "whispr@hangthe.dev";
-
 var GitHub = new (function() {
-    this.fs     = {};
+    this.fs = new Object;
     this.loaded = false;
-    this.stack  = [];
+    this.stack = new Array;
 
-    this.getCurrentPath = function() {
-        return this.stack.length === 0
-            ? '~/'
-            : this.stack.join('/');
-    };
-
+    this.getCurrentPath = function(){
+        if(this.stack.length == 0) 
+            return '~/';
+        return this.stack.join('/')
+    },    
     this.getCurrentWorkingDirectory = function() {
-        if (this.stack.length === 0) {
+        if(this.stack.length == 0) 
             return this.fs;
+        
+        var fs = this.fs
+        for(var i in this.stack) {
+            fs = fs[this.stack[i]];
         }
-        var node = this.fs;
-        this.stack.forEach(function(dir) {
-            node = node[dir];
-        });
-        return node;
+        return fs;
     };
-
-    var self = this;
-
-    $.getJSON(API_PREFIX + '/refs/heads/master')
-     .done(function(refData) {
-        var sha = refData.object.sha;
-
-        $.getJSON(API_PREFIX + '/trees/' + sha + '?recursive=1')
-         .done(function(treeData) {
-            treeData.tree.forEach(function(item) {
-                var parts  = item.path.split('/');
-                var cursor = self.fs;
-
-                parts.forEach(function(part, idx) {
-                    var isLeaf = (idx === parts.length - 1);
-
-                    if (!isLeaf) {
-                        cursor[part] = cursor[part] || {};
-                        cursor = cursor[part];
+        
+    var self = this;    
+    $.getJSON(API_PREFIX + '/refs/heads/master', function(data, textStatus, jqXHR){
+    //$.getJSON('data/master.json', function(data, textStatus, jqXHR){
+        var sha = data.object.sha;
+        $.getJSON(API_PREFIX + '/trees/'+sha+'?recursive=1', function(data, textStatus, jqXHR){
+        //$.getJSON('data/tree.json', function(data, textStatus, jqXHR){
+            for(i in data.tree) {
+                var item = data.tree[i];                
+                var paths = item.path.split('/');   
+                
+                var fs = self.fs;                
+                for(var i=0; i< paths.length; i++) {
+                    var path = paths[i];                    
+                    
+                    if(!fs.hasOwnProperty(path)) {
+                       fs[path] = new Object;
                     } else {
-                        item.path = part;
-                        cursor[part] = item;
+                       fs = fs[path]
                     }
-                });
-            });
-
+                       
+                    if (i == paths.length-1) {
+                        item.path = path;
+                        fs[path] = item;
+                    }
+                }
+            }
             self.loaded = true;
-         })
-         .fail(function(err) {
-            console.error('Error fetching tree:', err);
-         });
-     })
-     .fail(function(err) {
-        console.error('Error fetching master ref:', err);
-     });
+        });
+    });
 })();
 
-
 var App = {
-    echo: function(text, opts) {
-        this.echo(text, opts);
+    echo: function(text) {
+        this.echo(text);
+        if(ga != undefined) ga('send', 'event', 'echo', GitHub.getCurrentPath(), 'text', text);
     },
-
     help: function() {
         this.echo("\nAvailable commands:\n");
-        this.echo("\t[[b;#ffffff;]contact]     display contact information");
+        this.echo("\t[[b;#ffffff;]contact]     display contact infomation");
         this.echo("\t[[b;#ffffff;]whoami]      display my short brief");
         this.echo("\t[[b;#ffffff;]pgp]         display public pgp key");
-        this.echo("\t[[b;#ffffff;]su root]     enable session root permissions");
-        this.echo("\t[[b;#ffffff;]clear]       clear the console.");
+        this.echo("\t[[b;#ffffff;]su root]     enable session root permissions");    
+        this.echo("\t[[b;#ffffff;]clear]       clear the console.");                    
         this.echo("");
-        this.echo("Navigational commands: [[b;#ffffff;]cat cd id ls pwd]");
+        this.echo("Navigational commands: [[b;#ffffff;]cat cd id ls pwd]")
         this.echo("");
-    },
 
+        if(ga != undefined) ga('send', 'event', 'help', GitHub.getCurrentPath());
+    },
     whoami: function() {
         this.echo("\nDon't believe we've met...\n");
         this.echo("Just for context, here's a bit about myself\n");
@@ -85,21 +78,25 @@ var App = {
         this.echo("\t- A Programmer, mainly just to craft what I need");
         this.echo("\t- And an Ethical Hacker at the core");
         this.echo("\nI'm available to work as a freelancer, you can get in touch via the [[b;#ffffff;]contact] command\n");
-    },
 
+        if(ga != undefined) ga('send', 'event', 'whoami', GitHub.getCurrentPath());
+    },
     contact: function() {
-        this.echo("\nGet in touch via:\n");
-        this.echo("Email: <strong><a href='mailto:whispr@protonmail.com'>whispr@protonmail.com</a></strong>", { raw: true });
-        this.echo("Discord: <strong><a href='https://discord.com/users/hangthe.dev'>hangthe.dev</a></strong>", { raw: true });
-        this.echo("\n");
-    },
+        this.echo("\nGet in touch via:\n")
+        this.echo("Email: <strong><a href='mailto:whispr@protonmail.com'>whispr@protonmail.com</a></strong>", {raw:true}); 
+        this.echo("Discord: <strong><a href='https://discord.com/users/hangthe.dev'>hangthe.dev</a></strong> ", {raw:true}); 
+        this.echo("\n"); 
 
+        if(ga != undefined) ga('send', 'event', GitHub.getCurrentPath(), 'contact');
+    },
     su: function(user) {
         window.location.href = "https://hangthe.dev/td.mp4";
+        if(ga != undefined) ga('send', 'event', 'sudo', user);
     },
 
     sudo: function(user) {
-        this.echo("You must be the root user to run this program");
+        this.echo("You must be the root user to run this program")
+        if(ga != undefined) ga('send', 'event', 'sudo', user);
     },
 
     pgp: function() {
@@ -160,85 +157,89 @@ var App = {
         this.echo("\n");
         this.echo("-----END PGP PUBLIC KEY BLOCK-----\n");
         this.echo("\n"); 
-    },
 
-    id: function() {
+        if(ga != undefined) ga('send', 'event', GitHub.getCurrentPath(), 'pgp');
+
+    }, 
+    
+    id: function(){
         this.echo("[[b;#ffffff;]uid=0(root) gid=0(root) groups=0(root)]");
-    },
 
-    ls: function() {
+        if(ga != undefined) ga('send', 'event', 'id', GitHub.getCurrentPath());
+    },
+    ls: function() {        
         var wd = GitHub.getCurrentWorkingDirectory();
-        Object.keys(wd).forEach(function(name) {
-            var item = wd[name];
-            if (item && item.type) {
-                var display = item.type === 'tree'
-                    ? '[[b;#44D544;]' + item.path + ']'
-                    : item.path;
-                this.echo((item.mode || '') + '\t' + display);
+        for(i in wd) {
+            if(typeof wd[i] == 'object') {
+                var item = wd[i];
+                this.echo(item.mode+'\t' + (item.type=='tree'?'[[b;#44D544;]'+item.path+']':item.path));
             }
-        }, this);
-    },
-
-    cd: function(path) {
-        if (path === '..') {
-            this.stack.pop();
-            return;
         }
+
+        if(ga != undefined) ga('send', 'event', 'ls', GitHub.getCurrentPath());
+    },
+    cd: function(path) {        
+        if(path == '..') {
+            GitHub.stack.pop();
+            return;
+        }        
         var wd = GitHub.getCurrentWorkingDirectory();
-        var item = wd[path];
-        if (!item) {
+        var item = wd[path]
+        if(!item) {
             this.error("cd: " + path + ": No such file or directory");
-        } else if (item.type !== 'tree') {
-            this.error("cd: " + path + ": Not a directory");
+        } else if(item.type != 'tree') {
+            this.error("cd: " + path  + ": Not a directory");
         } else {
             GitHub.stack.push(path);
         }
-    },
 
-    cat: function(path) {
+        if(ga != undefined) ga('send', 'event', 'cd', GitHub.getCurrentPath(), 'path', path);
+    },
+    cat: function(path){
         var wd = GitHub.getCurrentWorkingDirectory();
         var item = wd[path];
-        if (!item) {
+        if(!item) {
             this.error("cat: " + path + ": No such file or directory");
-        } else if (item.type === 'tree') {
-            this.error("cat: " + path + ": Is a directory");
+        } else if(item.type == 'tree') {
+            this.error("cat: " + path  + ": Is a directory");
         } else {
             var term = this;
             term.pause();
-            $.getJSON(item.url)
-             .done(function(data) {
-                var content = data.content.trim();
-                if (data.encoding === 'base64') {
+            $.getJSON(item.url, function(data, textStatus, jqXHR){
+                var content = data.content.trim()
+                if(data.encoding == 'base64')
                     content = decode64(content);
-                }
-                term.echo(content);
+                term.echo(content); 
                 term.resume();
-             })
-             .fail(function(err) {
-                term.error("cat: error fetching " + path);
-                term.resume();
-             });
+            });
         }
+        if(ga != undefined) ga('send', 'event', 'cat', GitHub.getCurrentPath(), 'path', path);
     },
-
+    
     pwd: function() {
-        this.echo(GitHub.getCurrentPath());
-    },
+        var path = GitHub.getCurrentPath();
+        this.echo(path);
 
+        if(ga != undefined) ga('send', 'event', 'pwd', path);
+    },
+    
     startx: function() {
         this.error('xinit: unable to connect to X server: Resource temporarily unavailable\nxinit: server error');
+
+        if(ga != undefined) ga('send', 'event', 'startx', GitHub.getCurrentPath());
     }
-};
+}
 
 function handleAutocomplete(term) {
-    var command  = term.get_command();
-    var words    = command.split(' ');
+    var command = term.get_command();
+    var words = command.split(' ');
     var lastWord = words[words.length - 1];
-    var fs       = GitHub.getCurrentWorkingDirectory();
-    var suggestions = Object.keys(fs).filter(function(f) {
-        return f.startsWith(lastWord);
+    
+    var fs = GitHub.getCurrentWorkingDirectory();
+    var suggestions = Object.keys(fs).filter(function(file) {
+        return file.startsWith(lastWord);
     });
-
+    
     if (suggestions.length === 1) {
         words[words.length - 1] = suggestions[0];
         term.set_command(words.join(' ') + ' ');
@@ -247,52 +248,45 @@ function handleAutocomplete(term) {
     }
 }
 
-jQuery(function($) {
-    const isMobile = /iPhone|iPad|iPod|Android|Pixel|webOS|BlackBerry|Windows Phone|Opera Mini|IEMobile/i
-                     .test(navigator.userAgent);
+jQuery(document).ready(function($) {
+    $('body').terminal(App, {
+        greetings: 
+            "             _                       \n" +
+            "            | |                     \n" +
+            "   __      _| |__  _ ___ _ __  _ __ \n" + 
+            "   \\ \\ /\\ / / '_ \\| / __| '_ \\| '__|\n" +
+            "    \\ V  V /| | | | \\__ \\ |_) | |   \n" +
+            "     \\_/\\_/ |_| |_|_|___/ .__/|_|   \n" +
+            "                        | |         \n" +
+            "                        |_|         \n" +
+            "\n" +
 
-        $('#terminal').terminal(App, {
-            greetings:
-                "             _                       \n" +
-                "            | |                     \n" +
-                "   __      _| |__  _ ___ _ __  _ __ \n" +
-                "   \\ \\ /\\ / / '_ \\| / __| '_ \\| '__|\n" +
-                "    \\ V  V /| | | | \\__ \\ |_) | |   \n" +
-                "     \\_/\\_/ |_| |_|_|___/ .__/|_|   \n" +
-                "                        | |         \n" +
-                "                        |_|         \n" +
-                "\nType [[b;#ffffff;]ls] to explore resources on this page and [[b;#ffffff;]help] for the obvious reasons.\n",
-            prompt: function(callback) {
-                let path = '~' + (GitHub.stack.length ? '/' + GitHub.stack.join('/') : '');
-                callback(`whispr@hangthe.dev:${path}# `);
-            },
 
-            tabcompletion: true,
 
-            completion: function(string, callback) {
-                const full = this.get_command();
-                const before = this.before_cursor();
-                const parts = before.trim().split(/\s+/);
-                if (parts.length <= 1) {
-                    const cmds = Object.keys(App).filter(cmd => cmd.startsWith(string));
-                    callback(cmds);
-                } else {
-                    const fs = GitHub.getCurrentWorkingDirectory();
-                    const list = Object.keys(fs).filter(name => name.startsWith(string));
-                    callback(list);
+
+            "\nType [[b;#ffffff;]ls] to explore resources on this page and [[b;#ffffff;]help] for the obvious reasons.\n",
+        prompt: function(p){
+            var path = '~'
+            if(GitHub.stack.length > 0) {
+                for(i in GitHub.stack) {
+                    path+= '/';
+                    path+= GitHub.stack[i]
                 }
-            },
-    
-            mobileIgnoreAutoFocus: false,
-            useDefaultInput: !isMobile
-        });
-    
-        if (isMobile) {
-            $('#mobile-input').show().on('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    $('#terminal').terminal().exec($(this).val());
-                    $(this).val('');
-                }
+            }
+            p("whispr@hangthe.dev" + ":" + path + "# ");
+        },
+        onBlur: function() {
+            // prevent loosing focus
+            return false;
+        },
+        tabcompletion: true,
+        tabcompletion: true,
+        completion: function(command, callback) {
+            var fs = GitHub.getCurrentWorkingDirectory();
+            var suggestions = Object.keys(fs).filter(function(file) {
+                return file.startsWith(command);
             });
+            callback(suggestions);
         }
     });
+});
