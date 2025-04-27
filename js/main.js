@@ -43,8 +43,7 @@ var GitHub = new (function() {
                        
                     if (i == paths.length-1) {
                         item.path = path;
-                        fs[path] = item;
-                    }
+                        fs[path] = item                    }
                 }
             }
             self.loaded = true;
@@ -55,20 +54,17 @@ var GitHub = new (function() {
 var App = {
     echo: function(text) {
         this.echo(text);
-        if(ga != undefined) ga('send', 'event', 'echo', GitHub.getCurrentPath(), 'text', text);
     },
     help: function() {
         this.echo("\nAvailable commands:\n");
         this.echo("\t[[b;#ffffff;]contact]     display contact infomation");
         this.echo("\t[[b;#ffffff;]whoami]      display my short brief");
         this.echo("\t[[b;#ffffff;]pgp]         display public pgp key");
-        this.echo("\t[[b;#ffffff;]su root]     enable session root permissions");    
+        this.echo("\t[[b;#ffffff;]su root] enable session root permissions");    
         this.echo("\t[[b;#ffffff;]clear]       clear the console.");                    
         this.echo("");
         this.echo("Navigational commands: [[b;#ffffff;]cat cd id ls pwd]")
         this.echo("");
-
-        if(ga != undefined) ga('send', 'event', 'help', GitHub.getCurrentPath());
     },
     whoami: function() {
         this.echo("\nDon't believe we've met...\n");
@@ -78,25 +74,19 @@ var App = {
         this.echo("\t- A Programmer, mainly just to craft what I need");
         this.echo("\t- And an Ethical Hacker at the core");
         this.echo("\nI'm available to work as a freelancer, you can get in touch via the [[b;#ffffff;]contact] command\n");
-
-        if(ga != undefined) ga('send', 'event', 'whoami', GitHub.getCurrentPath());
     },
     contact: function() {
         this.echo("\nGet in touch via:\n")
         this.echo("Email: <strong><a href='mailto:whispr@protonmail.com'>whispr@protonmail.com</a></strong>", {raw:true}); 
         this.echo("Discord: <strong><a href='https://discord.com/users/hangthe.dev'>hangthe.dev</a></strong> ", {raw:true}); 
         this.echo("\n"); 
-
-        if(ga != undefined) ga('send', 'event', GitHub.getCurrentPath(), 'contact');
     },
     su: function(user) {
         window.location.href = "https://hangthe.dev/td.mp4";
-        if(ga != undefined) ga('send', 'event', 'sudo', user);
     },
 
     sudo: function(user) {
-        this.echo("You must be the root user to run this program")
-        if(ga != undefined) ga('send', 'event', 'sudo', user);
+        this.echo("You must be the root user to run this program");
     },
 
     pgp: function() {
@@ -157,15 +147,10 @@ var App = {
         this.echo("\n");
         this.echo("-----END PGP PUBLIC KEY BLOCK-----\n");
         this.echo("\n"); 
-
-        if(ga != undefined) ga('send', 'event', GitHub.getCurrentPath(), 'pgp');
-
     }, 
     
     id: function(){
         this.echo("[[b;#ffffff;]uid=0(root) gid=0(root) groups=0(root)]");
-
-        if(ga != undefined) ga('send', 'event', 'id', GitHub.getCurrentPath());
     },
     ls: function() {        
         var wd = GitHub.getCurrentWorkingDirectory();
@@ -175,8 +160,6 @@ var App = {
                 this.echo(item.mode+'\t' + (item.type=='tree'?'[[b;#44D544;]'+item.path+']':item.path));
             }
         }
-
-        if(ga != undefined) ga('send', 'event', 'ls', GitHub.getCurrentPath());
     },
     cd: function(path) {        
         if(path == '..') {
@@ -192,8 +175,6 @@ var App = {
         } else {
             GitHub.stack.push(path);
         }
-
-        if(ga != undefined) ga('send', 'event', 'cd', GitHub.getCurrentPath(), 'path', path);
     },
     cat: function(path){
         var wd = GitHub.getCurrentWorkingDirectory();
@@ -213,20 +194,15 @@ var App = {
                 term.resume();
             });
         }
-        if(ga != undefined) ga('send', 'event', 'cat', GitHub.getCurrentPath(), 'path', path);
     },
     
     pwd: function() {
         var path = GitHub.getCurrentPath();
         this.echo(path);
-
-        if(ga != undefined) ga('send', 'event', 'pwd', path);
     },
     
     startx: function() {
         this.error('xinit: unable to connect to X server: Resource temporarily unavailable\nxinit: server error');
-
-        if(ga != undefined) ga('send', 'event', 'startx', GitHub.getCurrentPath());
     }
 }
 
@@ -276,11 +252,14 @@ jQuery(document).ready(function($) {
             p("whispr@hangthe.dev" + ":" + path + "# ");
         },
         onBlur: function() {
-            // prevent loosing focus
+            if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+                return true;
+            }
             return false;
         },
         tabcompletion: true,
-        tabcompletion: true,
+        mobileIgnoreAutoFocus: false,
+        useDefaultInput: true,
         completion: function(command, callback) {
             var fs = GitHub.getCurrentWorkingDirectory();
             var suggestions = Object.keys(fs).filter(function(file) {
