@@ -252,11 +252,14 @@ jQuery(document).ready(function($) {
             p("whispr@hangthe.dev" + ":" + path + "# ");
         },
         onBlur: function() {
-            // prevent loosing focus
+            if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+                return true;
+            }
             return false;
         },
         tabcompletion: true,
-        tabcompletion: true,
+        mobileIgnoreAutoFocus: false,
+        useDefaultInput: true,
         completion: function(command, callback) {
             var fs = GitHub.getCurrentWorkingDirectory();
             var suggestions = Object.keys(fs).filter(function(file) {
