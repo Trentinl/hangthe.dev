@@ -47,7 +47,6 @@ var GitHub = new (function() {
                 }
             }
             self.loaded = true;
-        });
     });
 })();
 
@@ -224,48 +223,61 @@ function handleAutocomplete(term) {
     }
 }
 
-jQuery(document).ready(function($) {
-    $('body').terminal(App, {
-        greetings: 
-            "             _                       \n" +
-            "            | |                     \n" +
-            "   __      _| |__  _ ___ _ __  _ __ \n" + 
-            "   \\ \\ /\\ / / '_ \\| / __| '_ \\| '__|\n" +
-            "    \\ V  V /| | | | \\__ \\ |_) | |   \n" +
-            "     \\_/\\_/ |_| |_|_|___/ .__/|_|   \n" +
-            "                        | |         \n" +
-            "                        |_|         \n" +
-            "\n" +
+jQuery(function($) {
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
+    if (isMobile) {
+        // Show the mobile input field
+        $('#mobile-input').show();
 
-
-
-            "\nType [[b;#ffffff;]ls] to explore resources on this page and [[b;#ffffff;]help] for the obvious reasons.\n",
-        prompt: function(p){
-            var path = '~'
-            if(GitHub.stack.length > 0) {
-                for(i in GitHub.stack) {
-                    path+= '/';
-                    path+= GitHub.stack[i]
+        // Handle input from the mobile input field
+        $('#mobile-input').on('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const command = $(this).val();
+                $('#terminal').terminal().exec(command);
+                $(this).val(''); // Clear the input field
+            }
+        });
+    } else {
+        $('body').terminal(App, {
+            greetings: 
+                "             _                       \n" +
+                "            | |                     \n" +
+                "   __      _| |__  _ ___ _ __  _ __ \n" + 
+                "   \\ \\ /\\ / / '_ \\| / __| '_ \\| '__|\n" +
+                "    \\ V  V /| | | | \\__ \\ |_) | |   \n" +
+                "     \\_/\\_/ |_| |_|_|___/ .__/|_|   \n" +
+                "                        | |         \n" +
+                "                        |_|         \n" +
+                "\n" +
+                "\nType [[b;#ffffff;]ls] to explore resources on this page and [[b;#ffffff;]help] for the obvious reasons.\n",
+            prompt: function(p) {
+                var path = '~';
+                if (GitHub.stack.length > 0) {
+                    for (var i in GitHub.stack) {
+                        path += '/';
+                        path += GitHub.stack[i];
+                    }
                 }
+                p("whispr@hangthe.dev" + ":" + path + "# ");
+            },
+            onBlur: function() {
+                if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+                    return true;
+                }
+                return false;
+            },
+            tabcompletion: true,
+            mobileIgnoreAutoFocus: false,
+            useDefaultInput: true,
+            completion: function(command, callback) {
+                var fs = GitHub.getCurrentWorkingDirectory();
+                var suggestions = Object.keys(fs).filter(function(file) {
+                    return file.startsWith(command);
+                });
+                callback(suggestions);
             }
-            p("whispr@hangthe.dev" + ":" + path + "# ");
-        },
-        onBlur: function() {
-            if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-                return true;
-            }
-            return false;
-        },
-        tabcompletion: true,
-        mobileIgnoreAutoFocus: false,
-        useDefaultInput: true,
-        completion: function(command, callback) {
-            var fs = GitHub.getCurrentWorkingDirectory();
-            var suggestions = Object.keys(fs).filter(function(file) {
-                return file.startsWith(command);
-            });
-            callback(suggestions);
-        }
-    });
-});
+        });
+    }
+})
+})
